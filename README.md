@@ -7,7 +7,7 @@ At the moment the library supports:
 The library has Linux-specific functions separate as ENV to allow multiple environments (ex: Windows / No OS).
 
 ## Library API
-int libfirebase_init(const uint8_t log_enabled, const char *log_file);
+int libfirebase_init(const uint8_t log_enabled, const char *log_file);</br>
 	Initializes the library
 
 	Params:
@@ -19,7 +19,7 @@ int libfirebase_init(const uint8_t log_enabled, const char *log_file);
 	- -1 on error
 
 struct libfirebase_response_t *libfirebase_fcm_send(const char *endpoint, const char *message, const char *p256,
-                                                    const char *auth, const char *api_key);
+                                                    const char *auth, const char *api_key);</br>
 	Sends a string via FCM
 
 	Params:
@@ -29,13 +29,13 @@ struct libfirebase_response_t *libfirebase_fcm_send(const char *endpoint, const 
 	- client secret authentication token: string
 	- api key for sending or NULL if it is not required
 
-Returns:
+	Returns:
 	- HTTP response if successful: struct libfirebase_response_t with header, body and http code
 	- NULL on error
 
 struct libfirebase_response_t *libfirebase_fcm_send_bytes(const char *endpoint,
                                     const unsigned char *message, const unsigned int message_len,
-                                    const char *p256, const char *auth, const char *api_key);
+                                    const char *p256, const char *auth, const char *api_key);</br>
 	Sends a binary message via FCM
 
 	Params:
@@ -50,7 +50,7 @@ struct libfirebase_response_t *libfirebase_fcm_send_bytes(const char *endpoint,
 	- HTTP response if successful: struct libfirebase_response_t with header, body and http code
 	- NULL on error
 
-void libfirebase_free_response(struct libfirebase_response_t *resp);
+void libfirebase_free_response(struct libfirebase_response_t *resp);</br>
 	Frees the message that was returned by fcm send functions
 
 Params:
