@@ -15,6 +15,7 @@
 #include "libfirebase.h"
 #include "./tests/base64_tests.h"
 #include "./tests/http_tests.h"
+#include "./tests/hpack_tests.h"
 #include "./tests/encryption_tests.h"
 #include "./tests/full_fcm_tests.h"
 
@@ -33,6 +34,11 @@ int main(void)
     }
 
     if(encryption_test())
+    {
+        return 1;
+    }
+
+    if(hpack_test())
     {
         return 1;
     }

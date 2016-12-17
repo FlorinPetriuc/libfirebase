@@ -28,6 +28,12 @@ struct libfirebase_response_t
     uint16_t code;
 };
 
+#define LIBFIREBASE_SUCCESS             0
+#define LIBFIREBASE_CONNECTION_DROPPED  1
+
+typedef void (*libfirebase_fcm_recv_cb)(const unsigned char *data, const uint32_t len,
+                                                                const unsigned char error);
+
 /*
  * Initializes the library
  *
@@ -84,5 +90,10 @@ struct libfirebase_response_t *libfirebase_fcm_send_bytes(const char *endpoint,
  * - the libfirebase_response_t structure returned by libfirebase_fcm_send or libfirebase_fcm_send_bytes
  */
 void libfirebase_free_response(struct libfirebase_response_t *resp);
+
+int libfirebase_fcm_register_recv(const char *endpoint,
+                                  const uint64_t android_id, const uint64_t secret, const uint64_t sender_id,
+                                  const char *app, const char *app_id, const char *wp, const char *key,
+                                  libfirebase_fcm_recv_cb fcm_recv_cb);
 
 #endif

@@ -12,10 +12,13 @@
 # General Public License for more details.
 #
 
-.PHONY: fcm_send_example clean
+.PHONY: fcm_send_example fcm_recv_example clean
 
 fcm_send_example: fcm_send_example.c
 	$(CC) $(CFLAGS) $@.c -o$@ -L../../build/lib -lfirebase $(LDFLAGS)
 
+fcm_recv_example: fcm_recv_example.c
+	$(CC) $(CFLAGS) $@.c -o$@ -L../../build/lib -lfirebase $(LDFLAGS)
+
 clean:
-	rm -rf ./fcm_send_example
+	rm -rf ./fcm_send_example ./fcm_recv_example

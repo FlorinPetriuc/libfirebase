@@ -144,12 +144,12 @@ RETRY_READ:
 
     err_ret = SSL_get_error(ssl, read_ret);
 
+    env_logWrite(LOG_TYPE_ERROR, "Read failed: %d", 1, err_ret);
+
     if(err_ret == SSL_ERROR_WANT_READ || err_ret == SSL_ERROR_WANT_WRITE)
     {
         goto RETRY_READ;
     }
-
-    env_logWrite(LOG_TYPE_ERROR, "Read failed: %d", 1, err_ret);
 
     return -1;
 }
@@ -193,23 +193,21 @@ int env_send_n_secure_data(SSL *ssl, const char *data, const unsigned int data_l
 
         err_ret = SSL_get_error(ssl, sent);
 
-        if(err_ret == SSL_ERROR_WANT_READ || err_ret == SSL_ERROR_WANT_WRITE)
-        {
-            ++retry;
-
-            if(retry > 3)
-            {
-                env_logWrite(LOG_TYPE_ERROR, "Send failed: timeout", 0);
-
-                return -1;
-            }
-
-            continue;
-        }
-
         env_logWrite(LOG_TYPE_ERROR, "Send failed: %d", 1, err_ret);
 
-        return -1;
+        if(err_ret != SSL_ERROR_WANT_READ && err_ret != SSL_ERROR_WANT_WRITE)
+        {
+            return -1;
+        }
+
+        ++retry;
+
+        if(retry > 3)
+        {
+            return -1;
+        }
+
+        continue;
     }
 
     return 0;

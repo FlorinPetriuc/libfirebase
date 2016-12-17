@@ -75,3 +75,15 @@ void libfirebase_free_response(struct libfirebase_response_t *resp)
 {
     free_firebase_response(resp);
 }
+
+int libfirebase_fcm_register_recv(const char *endpoint,
+                                  const uint64_t android_id, const uint64_t secret, const uint64_t sender_id,
+                                  const char *app, const char *app_id, const char *wp, const char *key,
+                                  libfirebase_fcm_recv_cb fcm_recv_cb)
+{
+    int ret;
+
+    ret = fcm_register_recv(endpoint, android_id, secret, sender_id, app, app_id, wp, key, fcm_recv_cb);
+
+    return ret;
+}
