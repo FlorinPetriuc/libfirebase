@@ -144,11 +144,18 @@ RETRY_READ:
 
     err_ret = SSL_get_error(ssl, read_ret);
 
-    env_logWrite(LOG_TYPE_ERROR, "Read failed: %d", 1, err_ret);
+    env_logWrite(LOG_TYPE_ERROR, "Read failed: %d SSL err: %d", 2, read_ret, err_ret);
 
     if(err_ret == SSL_ERROR_WANT_READ || err_ret == SSL_ERROR_WANT_WRITE)
     {
         goto RETRY_READ;
+    }
+
+    if(err_ret == SSL_ERROR_SYSCALL)
+    {
+        err_ret = ERR_get_error();
+
+        env_logWrite(LOG_TYPE_ERROR, "Read failed: ERR err: %d", 1, err_ret);
     }
 
     return -1;
@@ -193,11 +200,18 @@ int env_send_n_secure_data(SSL *ssl, const char *data, const unsigned int data_l
 
         err_ret = SSL_get_error(ssl, sent);
 
-        env_logWrite(LOG_TYPE_ERROR, "Send failed: %d", 1, err_ret);
+        env_logWrite(LOG_TYPE_ERROR, "Send failed %d: SSL err %d", 2, sent, err_ret);
 
         if(err_ret != SSL_ERROR_WANT_READ && err_ret != SSL_ERROR_WANT_WRITE)
         {
             return -1;
+        }
+
+        if(err_ret == SSL_ERROR_SYSCALL)
+        {
+            err_ret = ERR_get_error();
+
+            env_logWrite(LOG_TYPE_ERROR, "Send failed: ERR err: %d", 1, err_ret);
         }
 
         ++retry;
